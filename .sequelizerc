@@ -1,0 +1,10 @@
+'use strict'
+
+const { resolve } = require('path')
+
+module.exports = {
+  'config': resolve(__dirname, 'src', 'config', 'postgres.js'),
+  'models-path': resolve(__dirname, 'src', 'app', 'models'),
+  'seeders-path': resolve(__dirname, 'src', 'database', 'seeds'),
+  'migrations-path': resolve(__dirname, 'src', 'database', 'migrations')
+};
