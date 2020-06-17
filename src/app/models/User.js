@@ -37,8 +37,14 @@ class User extends Model {
 
   response() {
     const { id, name, email } = this;
-
     return { id, name, email };
+  }
+
+  static associate(models) {
+    this.hasMany(models.Collection, {
+      foreignKey: 'user_id',
+      as: 'collections',
+    });
   }
 }
 
