@@ -30,6 +30,16 @@ class User extends Model {
       expiresIn: authConfig.expiresIn,
     });
   }
+
+  comparePassword(password) {
+    return bcrypt.compare(password, this.password_hash);
+  }
+
+  response() {
+    const { id, name, email } = this;
+
+    return { id, name, email };
+  }
 }
 
 export default User;

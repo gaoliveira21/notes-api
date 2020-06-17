@@ -33,11 +33,8 @@ class UserController {
 
     return response.status(201).json({
       success: true,
-      user: {
-        email,
-        name,
-        token: user.generateAuthToken(),
-      },
+      user: user.response(),
+      token: user.generateAuthToken(),
     });
   }
 }
