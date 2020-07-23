@@ -4,9 +4,9 @@ services:
     container_name: notes_postgres
     image: postgres
     restart: unless-stopped
-    environment: 
+    environment:
       POSTGRES_PASSWORD: root
     volumes:
-      - ./data/postgresdb:/data/postgresdb
+      - ./data/postgresql:/var/lib/postgresql/data
     ports:
       - '5432:5432'
