@@ -14,5 +14,6 @@ routes.post('/sessions', SessionController.store);
 routes.use(AuthMiddleware);
 
 routes.get('/collections', CollectionController.index);
+routes.post('/collections', CollectionController.store);
 
 export default routes;
