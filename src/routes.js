@@ -15,5 +15,7 @@ routes.use(AuthMiddleware);
 
 routes.get('/collections', CollectionController.index);
 routes.post('/collections', CollectionController.store);
+routes.put('/collections/:id', CollectionController.update);
+routes.delete('/collections/:id', CollectionController.delete);
 
 export default routes;
