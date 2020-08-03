@@ -4,8 +4,9 @@ import postgres from '../config/postgres';
 
 import User from '../app/models/User';
 import Collection from '../app/models/Collection';
+import Note from '../app/models/Note';
 
-const models = [User, Collection];
+const models = [User, Collection, Note];
 
 class Database {
   constructor() {

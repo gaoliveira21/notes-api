@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import Collection from '../models/Collection';
 import User from '../models/User';
+import Note from '../models/Note';
 
 class CollectionController {
   async index(request, response) {
