@@ -19,7 +19,10 @@ class CollectionController {
       ],
     });
 
-    return response.json(collections);
+    const totalRecords = await Collection.count();
+    const totalPages = Math.ceil(totalRecords / limit);
+
+    return response.json({ collections, totalRecords, totalPages });
   }
 
   async store(request, response) {
