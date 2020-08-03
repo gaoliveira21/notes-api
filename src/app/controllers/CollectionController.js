@@ -26,6 +26,25 @@ class CollectionController {
     return response.json({ collections, totalRecords, totalPages });
   }
 
+  async show(request, response) {
+    const { id } = request.params;
+
+    const collection = await Collection.findByPk(id, {
+      attributes: ['id', 'title', 'color'],
+      include: [
+        { model: Note, as: 'notes', attributes: ['id', 'body', 'created_at'] },
+      ],
+    });
+
+    if (!collection) {
+      return response
+        .status(404)
+        .json({ success: false, error: 'Collection not found' });
+    }
+
+    return response.json(collection);
+  }
+
   async store(request, response) {
     const schema = yup.object().shape({
       title: yup.string().required(),

@@ -14,6 +14,7 @@ routes.post('/sessions', SessionController.store);
 routes.use(AuthMiddleware);
 
 routes.get('/collections', CollectionController.index);
+routes.get('/collections/:id', CollectionController.show);
 routes.post('/collections', CollectionController.store);
 routes.put('/collections/:id', CollectionController.update);
 routes.delete('/collections/:id', CollectionController.delete);
