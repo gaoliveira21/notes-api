@@ -21,5 +21,6 @@ routes.put('/collections/:id', CollectionController.update);
 routes.delete('/collections/:id', CollectionController.delete);
 
 routes.get('/collections/:id/notes', NoteController.index);
+routes.post('/collections/:id/notes', NoteController.store);
 
 export default routes;
