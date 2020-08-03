@@ -5,6 +5,7 @@ class Collection extends Model {
     super.init(
       {
         title: Sequelize.STRING,
+        color: Sequelize.STRING,
       },
       { sequelize }
     );

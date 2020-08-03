@@ -13,7 +13,7 @@ class CollectionController {
       },
       limit,
       offset: (page - 1) * limit,
-      attributes: ['id', 'title'],
+      attributes: ['id', 'title', 'color'],
       include: [
         { model: User, as: 'owner', attributes: ['id', 'name', 'email'] },
       ],
@@ -25,6 +25,10 @@ class CollectionController {
   async store(request, response) {
     const schema = yup.object().shape({
       title: yup.string().required(),
+      color: yup
+        .string()
+        .matches(/^#[0-9A-F]{6}$/i, 'Color must be a valid hex color')
+        .required(),
     });
 
     await schema.validate(request.body).catch((err) =>
@@ -35,20 +39,31 @@ class CollectionController {
       })
     );
 
-    const { title } = request.body;
+    const { title, color } = request.body;
     const { userId: user_id } = request;
 
     const { id } = await Collection.create({
       title,
+      color,
       user_id,
     });
 
-    return response.status(201).json({ id, title });
+    return response.status(201).json({ id, title, color });
   }
 
   async update(request, response) {
+    if (Object.keys(request.body).length === 0) {
+      return response.status(400).json({
+        success: false,
+        error: 'No body sent',
+      });
+    }
+
     const schema = yup.object().shape({
-      title: yup.string().required(),
+      title: yup.string(),
+      color: yup
+        .string()
+        .matches(/^#[0-9A-F]{6}$/i, 'Color must be a valid hex color'),
     });
 
     await schema.validate(request.body).catch((err) =>
@@ -60,7 +75,7 @@ class CollectionController {
     );
 
     const { id } = request.params;
-    const { title } = request.body;
+    const { title, color } = request.body;
     const { userId: user_id } = request;
 
     const collection = await Collection.findOne({
@@ -79,9 +94,14 @@ class CollectionController {
 
     await collection.update({
       title,
+      color,
     });
 
-    return response.json({ id, title });
+    return response.json({
+      id: collection.id,
+      title: collection.title,
+      color: collection.color,
+    });
   }
 
   async delete(request, response) {
