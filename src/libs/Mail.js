@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import nodemailer from 'nodemailer';
 import nodemailerExpressHbs from 'nodemailer-express-handlebars';
+import expressHbs from 'express-handlebars';
 import { resolve } from 'path';
 
 import mailConfig from '../config/mail';
@@ -10,6 +11,7 @@ class Mail {
     this.transporter;
 
     this.init();
+    this.configureTemplates();
   }
 
   init() {
@@ -20,12 +22,19 @@ class Mail {
   }
 
   configureTemplates() {
+    const viewPath = resolve(__dirname, '..', 'resources', 'mail');
+
     this.transporter.use(
       'compile',
       nodemailerExpressHbs({
-        viewEngine: 'handlebars',
-        viewPath: resolve(__dirname, '..', 'resources', 'mail'),
-        extName: '.html',
+        viewEngine: expressHbs.create({
+          layoutsDir: resolve(viewPath, 'layouts'),
+          partialsDir: resolve(viewPath, 'partials'),
+          defaultLayout: 'default',
+          extname: '.hbs',
+        }),
+        viewPath,
+        extName: '.hbs',
       })
     );
   }

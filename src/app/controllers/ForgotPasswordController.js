@@ -1,7 +1,8 @@
 import crypto from 'crypto';
 import User from '../models/User';
+import Mail from '../../libs/Mail';
 
-class ResetPasswordController {
+class ForgotPasswordController {
   async store(request, response) {
     const { email } = request.body;
 
@@ -16,8 +17,21 @@ class ResetPasswordController {
     const now = new Date();
     now.setHours(now.getHours() + 1);
 
+    user.password_reset_token = token;
+    user.password_reset_expires = now;
+    user.save();
+
+    await Mail.sendMail({
+      to: email,
+      from: 'admin@notes.com',
+      subject: 'Recuperação de senha',
+      html: '',
+      template: 'auth/forgot_password',
+      context: { token },
+    });
+
     return response.json();
   }
 }
 
-export default new ResetPasswordController();
+export default new ForgotPasswordController();
