@@ -11,6 +11,7 @@ import validateUserStore from './app/validators/User/UserStore';
 import validateSessionStore from './app/validators/Session/SessionStore';
 import validateForgotPasswordStore from './app/validators/ForgotPassword/ForgotPasswordStore';
 import validateResetPasswordStore from './app/validators/ResetPassword/ResetPasswordStore';
+import validateCollectionStore from './app/validators/Collection/CollectionStore';
 
 import AuthMiddleware from './app/middlewares/auth';
 
@@ -34,7 +35,11 @@ routes.use(AuthMiddleware);
 
 routes.get('/collections', CollectionController.index);
 routes.get('/collections/:id', CollectionController.show);
-routes.post('/collections', CollectionController.store);
+routes.post(
+  '/collections',
+  validateCollectionStore,
+  CollectionController.store
+);
 routes.put('/collections/:id', CollectionController.update);
 routes.delete('/collections/:id', CollectionController.delete);
 

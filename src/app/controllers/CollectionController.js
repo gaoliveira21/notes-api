@@ -46,22 +46,6 @@ class CollectionController {
   }
 
   async store(request, response) {
-    const schema = yup.object().shape({
-      title: yup.string().required(),
-      color: yup
-        .string()
-        .matches(/^#[0-9A-F]{6}$/i, 'Color must be a valid hex color')
-        .required(),
-    });
-
-    await schema.validate(request.body).catch((err) =>
-      response.status(400).json({
-        success: false,
-        error: err.name,
-        details: err.errors,
-      })
-    );
-
     const { title, color } = request.body;
     const { userId: user_id } = request;
 
