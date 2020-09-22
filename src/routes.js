@@ -10,6 +10,7 @@ import ResetPasswordController from './app/controllers/ResetPasswordController';
 import validateUserStore from './app/validators/User/UserStore';
 import validateSessionStore from './app/validators/Session/SessionStore';
 import validateForgotPasswordStore from './app/validators/ForgotPassword/ForgotPasswordStore';
+import validateResetPasswordStore from './app/validators/ResetPassword/ResetPasswordStore';
 
 import AuthMiddleware from './app/middlewares/auth';
 
@@ -23,7 +24,11 @@ routes.post(
   validateForgotPasswordStore,
   ForgotPasswordController.store
 );
-routes.post('/reset_password', ResetPasswordController.store);
+routes.post(
+  '/reset_password',
+  validateResetPasswordStore,
+  ResetPasswordController.store
+);
 
 routes.use(AuthMiddleware);
 
