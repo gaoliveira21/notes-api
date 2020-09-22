@@ -8,13 +8,14 @@ import ForgotPasswordController from './app/controllers/ForgotPasswordController
 import ResetPasswordController from './app/controllers/ResetPasswordController';
 
 import validateUserStore from './app/validators/User/UserStore';
+import validateSessionStore from './app/validators/Session/SessionStore';
 
 import AuthMiddleware from './app/middlewares/auth';
 
 const routes = Router();
 
 routes.post('/users', validateUserStore, UserController.store);
-routes.post('/sessions', SessionController.store);
+routes.post('/sessions', validateSessionStore, SessionController.store);
 
 routes.post('/forgot_password', ForgotPasswordController.store);
 routes.post('/reset_password', ResetPasswordController.store);
