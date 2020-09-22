@@ -30,7 +30,7 @@ class ForgotPasswordController {
       context: { token },
     });
 
-    return response.json();
+    return response.status(201).json();
   }
 }
 

@@ -5,6 +5,7 @@ import SessionController from './app/controllers/SessionController';
 import CollectionController from './app/controllers/CollectionController';
 import NoteController from './app/controllers/NoteController';
 import ForgotPasswordController from './app/controllers/ForgotPasswordController';
+import ResetPasswordController from './app/controllers/ResetPasswordController';
 
 import AuthMiddleware from './app/middlewares/auth';
 
@@ -13,7 +14,8 @@ const routes = Router();
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
 
-routes.post('/forgot-password', ForgotPasswordController.store);
+routes.post('/forgot_password', ForgotPasswordController.store);
+routes.post('/reset_password', ResetPasswordController.store);
 
 routes.use(AuthMiddleware);
 
