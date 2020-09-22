@@ -1,4 +1,3 @@
-import * as yup from 'yup';
 import Collection from '../models/Collection';
 import User from '../models/User';
 import Note from '../models/Note';
@@ -65,21 +64,6 @@ class CollectionController {
         error: 'No body sent',
       });
     }
-
-    const schema = yup.object().shape({
-      title: yup.string(),
-      color: yup
-        .string()
-        .matches(/^#[0-9A-F]{6}$/i, 'Color must be a valid hex color'),
-    });
-
-    await schema.validate(request.body).catch((err) =>
-      response.status(400).json({
-        success: false,
-        error: err.name,
-        details: err.errors,
-      })
-    );
 
     const { id } = request.params;
     const { title, color } = request.body;

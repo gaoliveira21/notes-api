@@ -12,6 +12,7 @@ import validateSessionStore from './app/validators/Session/SessionStore';
 import validateForgotPasswordStore from './app/validators/ForgotPassword/ForgotPasswordStore';
 import validateResetPasswordStore from './app/validators/ResetPassword/ResetPasswordStore';
 import validateCollectionStore from './app/validators/Collection/CollectionStore';
+import validateCollectionUpdate from './app/validators/Collection/CollectionUpdate';
 
 import AuthMiddleware from './app/middlewares/auth';
 
@@ -40,7 +41,11 @@ routes.post(
   validateCollectionStore,
   CollectionController.store
 );
-routes.put('/collections/:id', CollectionController.update);
+routes.put(
+  '/collections/:id',
+  validateCollectionUpdate,
+  CollectionController.update
+);
 routes.delete('/collections/:id', CollectionController.delete);
 
 routes.get('/collections/:id/notes', NoteController.index);
