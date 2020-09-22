@@ -13,6 +13,7 @@ import validateForgotPasswordStore from './app/validators/ForgotPassword/ForgotP
 import validateResetPasswordStore from './app/validators/ResetPassword/ResetPasswordStore';
 import validateCollectionStore from './app/validators/Collection/CollectionStore';
 import validateCollectionUpdate from './app/validators/Collection/CollectionUpdate';
+import validateNoteStore from './app/validators/Note/NoteStore';
 
 import AuthMiddleware from './app/middlewares/auth';
 
@@ -49,6 +50,6 @@ routes.put(
 routes.delete('/collections/:id', CollectionController.delete);
 
 routes.get('/collections/:id/notes', NoteController.index);
-routes.post('/collections/:id/notes', NoteController.store);
+routes.post('/collections/:id/notes', validateNoteStore, NoteController.store);
 
 export default routes;

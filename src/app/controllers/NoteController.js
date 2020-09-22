@@ -45,18 +45,6 @@ class NoteController {
   }
 
   async store(request, response) {
-    const schema = yup.object().shape({
-      body: yup.string().required().max(1024),
-    });
-
-    await schema.validate(request.body).catch((err) =>
-      response.status(400).json({
-        success: false,
-        error: err.name,
-        details: err.errors,
-      })
-    );
-
     const { body } = request.body;
     const { id: collection_id } = request.params;
     const { userId: user_id } = request;
