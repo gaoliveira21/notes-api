@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import User from '../models/User';
-import Mail from '../../libs/Mail';
+import Queue from '../../libs/Queue';
+import ForgotPasswordMail from '../jobs/ForgotPasswordMail';
 
 class ForgotPasswordController {
   async store(request, response) {
@@ -21,13 +22,9 @@ class ForgotPasswordController {
     user.password_reset_expires = now;
     user.save();
 
-    await Mail.sendMail({
-      to: email,
-      from: 'admin@notes.com',
-      subject: 'Recuperação de senha',
-      html: '',
-      template: 'auth/forgot_password',
-      context: { token },
+    Queue.addJob(ForgotPasswordMail.key, {
+      email,
+      token,
     });
 
     return response.status(201).json();
