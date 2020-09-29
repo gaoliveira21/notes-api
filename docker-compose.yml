@@ -10,3 +10,11 @@ services:
       - ./data/postgresql:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+  redis:
+    container_name: notes_redis
+    image: redis
+    restart: unless-stopped
+    volumes:
+      - ./data/redisdb:/data
+    ports:
+      - "6379:6379"
