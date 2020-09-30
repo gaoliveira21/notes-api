@@ -2,10 +2,19 @@ import Collection from '../models/Collection';
 import User from '../models/User';
 import Note from '../models/Note';
 
+import Cache from '../../libs/Cache';
+
 class CollectionController {
   async index(request, response) {
     const { page = 1, limit = 10 } = request.query;
     const { userId: user_id } = request;
+
+    const cacheKey = `user:${user_id}:collections:${page}`;
+    const cached = await Cache.get(cacheKey);
+
+    if (cached) {
+      return response.json(cached);
+    }
 
     const collections = await Collection.findAll({
       where: {
@@ -19,8 +28,10 @@ class CollectionController {
       ],
     });
 
-    const totalRecords = await Collection.count();
+    const totalRecords = await Collection.count({ where: { user_id } });
     const totalPages = Math.ceil(totalRecords / limit);
+
+    await Cache.set(cacheKey, { collections, totalRecords, totalPages });
 
     return response.json({ collections, totalRecords, totalPages });
   }
@@ -53,6 +64,8 @@ class CollectionController {
       color,
       user_id,
     });
+
+    await Cache.invalidatePreffix(`user:${user_id}:collections`);
 
     return response.status(201).json({ id, title, color });
   }
@@ -88,6 +101,8 @@ class CollectionController {
       color,
     });
 
+    await Cache.invalidatePreffix(`user:${user_id}:collections`);
+
     return response.json({
       id: collection.id,
       title: collection.title,
@@ -114,6 +129,8 @@ class CollectionController {
     }
 
     await collection.destroy();
+
+    await Cache.invalidatePreffix(`user:${user_id}:collections`);
 
     return response.status(204).json();
   }
