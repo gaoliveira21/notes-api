@@ -1,4 +1,3 @@
-import * as yup from 'yup';
 import Note from '../models/Note';
 import Collection from '../models/Collection';
 
