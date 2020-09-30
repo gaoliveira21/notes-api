@@ -1,11 +1,21 @@
 import Note from '../models/Note';
 import Collection from '../models/Collection';
 
+import Cache from '../../libs/Cache';
+
 class NoteController {
   async index(request, response) {
     const { page = 1, limit = 10 } = request.query;
     const { id: collection_id } = request.params;
     const { userId: user_id } = request;
+
+    const cached = await Cache.get(
+      `user:${user_id}:collection:${collection_id}:notes:${page}`
+    );
+
+    if (cached) {
+      return response.json(cached);
+    }
 
     const collection = await Collection.findOne({
       where: {
@@ -37,8 +47,17 @@ class NoteController {
       ],
     });
 
-    const totalRecords = await Note.count();
+    const totalRecords = await Note.count({
+      where: {
+        collection_id,
+      },
+    });
     const totalPages = Math.ceil(totalRecords / limit);
+
+    await Cache.set(
+      `user:${user_id}:collection:${collection_id}:notes:${page}`,
+      { notes, totalRecords, totalPages }
+    );
 
     return response.json({ notes, totalRecords, totalPages });
   }
@@ -66,6 +85,10 @@ class NoteController {
       body,
       collection_id,
     });
+
+    await Cache.invalidatePreffix(
+      `user:${user_id}:collection:${collection_id}:notes`
+    );
 
     return response.status(201).json(notes);
   }
